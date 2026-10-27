@@ -1,22 +1,54 @@
-import environ
+import os
 from pathlib import Path
 
+import environ
+
+# ──────────────────────────────────────────────────────────────
+# RUTAS Y ENTORNO
+# ──────────────────────────────────────────────────────────────
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-env = environ.Env(DEBUG=(bool, True))
-environ.Env.read_env(BASE_DIR / '.env')
+env = environ.Env()
+environ.Env.read_env(BASE_DIR / '.env')   # solo local; en Render se usan variables de entorno
 
+# Render define la variable RENDER automáticamente en sus servidores
+EN_RENDER = 'RENDER' in os.environ
+
+# ──────────────────────────────────────────────────────────────
+# SEGURIDAD
+# ──────────────────────────────────────────────────────────────
 SECRET_KEY = env('SECRET_KEY', default='dev-key-insegura-solo-para-desarrollo')
-DEBUG = env('DEBUG', default=True)
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['localhost', '127.0.0.1', '*'])
 
+# Local: DEBUG=True por defecto. En Render: DEBUG=False por defecto.
+DEBUG = env.bool('DEBUG', default=not EN_RENDER)
+
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['localhost', '127.0.0.1'])
+CSRF_TRUSTED_ORIGINS = []
+
+RENDER_HOST = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_HOST:
+    ALLOWED_HOSTS.append(RENDER_HOST)
+    CSRF_TRUSTED_ORIGINS.append(f'https://{RENDER_HOST}')
+
+if EN_RENDER:
+    # Render termina el HTTPS en su proxy; sin esto el login/admin falla con 403
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+if not DEBUG:
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
+# ──────────────────────────────────────────────────────────────
+# APLICACIONES
+# ──────────────────────────────────────────────────────────────
 INSTALLED_APPS = [
-    'jazzmin',
+    'jazzmin',                                   # debe ir antes de admin
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'whitenoise.runserver_nostatic',             # antes de staticfiles
     'django.contrib.staticfiles',
     'django.contrib.sites',
     # Terceros
@@ -24,7 +56,6 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'rest_framework',
-    'whitenoise.runserver_nostatic',
     # Apps del ERP
     'clientes',
     'proveedores',
@@ -36,7 +67,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',   # justo después de Security
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -48,6 +79,9 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'core.urls'
 
+# ──────────────────────────────────────────────────────────────
+# PLANTILLAS
+# ──────────────────────────────────────────────────────────────
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -64,26 +98,49 @@ TEMPLATES = [
     },
 ]
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+# ──────────────────────────────────────────────────────────────
+# BASE DE DATOS
+# Si defines DATABASE_URL (por ejemplo PostgreSQL de Render) se usa esa;
+# si no, se usa SQLite como hasta ahora.
+# ──────────────────────────────────────────────────────────────
+if env('DATABASE_URL', default=''):
+    DATABASES = {'default': env.db('DATABASE_URL')}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
 
+# ──────────────────────────────────────────────────────────────
+# IDIOMA Y ZONA HORARIA
+# ──────────────────────────────────────────────────────────────
 LANGUAGE_CODE = 'es-mx'
 TIME_ZONE = 'America/Mexico_City'
 USE_I18N = True
 USE_TZ = True
 
+# ──────────────────────────────────────────────────────────────
+# ARCHIVOS ESTÁTICOS Y MEDIA
+# ──────────────────────────────────────────────────────────────
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_DIRS = [BASE_DIR / 'static']
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_DIRS = [BASE_DIR / 'static'] if (BASE_DIR / 'static').exists() else []
+
+STORAGES = {
+    'default': {'BACKEND': 'django.core.files.storage.FileSystemStorage'},
+    'staticfiles': {'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage'},
+}
+# Si falta un archivo estático (por ejemplo erp_custom.css) no tumba la página con 500
+WHITENOISE_MANIFEST_STRICT = False
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+# ──────────────────────────────────────────────────────────────
+# AUTENTICACIÓN (allauth)
+# ──────────────────────────────────────────────────────────────
 SITE_ID = 1
 
 AUTHENTICATION_BACKENDS = [
@@ -101,6 +158,9 @@ LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/productos/'
 LOGOUT_REDIRECT_URL = '/'
 
+# ──────────────────────────────────────────────────────────────
+# REST FRAMEWORK
+# ──────────────────────────────────────────────────────────────
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
@@ -109,6 +169,29 @@ REST_FRAMEWORK = {
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# ──────────────────────────────────────────────────────────────
+# LOGS: con DEBUG=False Django no imprime los errores 500 por defecto.
+# Esto los manda a la consola, y así aparecen en Render → Logs.
+# ──────────────────────────────────────────────────────────────
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {'class': 'logging.StreamHandler'},
+    },
+    'root': {'handlers': ['console'], 'level': 'INFO'},
+    'loggers': {
+        'django.request': {
+            'handlers': ['console'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+    },
+}
+
+# ──────────────────────────────────────────────────────────────
+# JAZZMIN (admin)
+# ──────────────────────────────────────────────────────────────
 JAZZMIN_SETTINGS = {
     'site_title': 'ERP Django',
     'site_header': 'ERP UTEC Celaya',
