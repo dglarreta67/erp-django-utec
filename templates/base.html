@@ -262,11 +262,12 @@
     <a class="erp-brand" href="/">
         <span>🏍️</span> MotoERP <small class="d-none d-md-inline" style="font-size: 0.75rem; color: var(--clr-chrome); font-weight: normal;">| Cascos & Biker Shop</small>
     </a>
-    <div class="d-flex align-items-center">
+    <div class="d-flex align-items-center flex-wrap">
         <a href="{% url 'productos:lista' %}" class="erp-nav-link {% block nav_productos %}{% endblock %}">🏍️ Motos y Cascos</a>
         <a href="{% url 'clientes:lista' %}" class="erp-nav-link {% block nav_clientes %}{% endblock %}">👥 Clientes</a>
         <a href="{% url 'proveedores:lista' %}" class="erp-nav-link {% block nav_proveedores %}{% endblock %}">🏢 Proveedores</a>
         <a href="{% url 'ventas:lista' %}" class="erp-nav-link {% block nav_ventas %}{% endblock %}">🏁 Ventas</a>
+        <a href="{% url 'admin:index' %}" class="erp-nav-link" target="_blank">⚙️ Admin</a>
         {% if user.is_authenticated %}
             <a href="{% url 'account_logout' %}" class="erp-nav-link">Salir ({{ user.username }})</a>
         {% else %}
@@ -320,7 +321,6 @@
     const themeIcon = document.getElementById('theme-toggle-icon');
     const themeText = document.getElementById('theme-toggle-text');
 
-    // Recuperar tema guardado en localStorage o detectar preferencia del sistema
     const savedTheme = localStorage.getItem('theme');
     const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     const initialTheme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
