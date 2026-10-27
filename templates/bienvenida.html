@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Inicio{% endblock %}
+
+{% block content %}
+<div class="text-center py-4">
+    <h2>📦 Sistema ERP Django</h2>
+    <p class="text-muted">Espiral 3 · Sprint 2 Completo · Hito M3</p>
+</div>
+
+<div class="row g-3">
+    {% for m in modulos %}
+    <div class="col-md-4">
+        <div class="erp-card text-center">
+            <div style="font-size:2rem;">{{ m.icono }}</div>
+            <h4>{{ m.nombre }}</h4>
+            <p class="text-muted">{{ m.descripcion }}</p>
+            <a href="{{ m.url }}" class="btn-erp-gold btn-erp-sm">Acceder</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

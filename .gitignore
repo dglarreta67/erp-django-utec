@@ -1,0 +1,13 @@
+env_erp/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+db.sqlite3
+.env
+staticfiles/
+media/
+.vscode/
+Thumbs.db
+.DS_Store

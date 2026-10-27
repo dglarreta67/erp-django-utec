@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Eliminar — {{ proveedor.nombre }}{% endblock %}
+{% block nav_proveedores %}active{% endblock %}
+
+{% block content %}
+<h2>🗑️ Eliminar proveedor</h2>
+<div class="erp-card" style="max-width:540px;">
+    <div class="erp-alert-danger">
+        <strong>¿Eliminar a "{{ proveedor.nombre }}"?</strong>
+    </div>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn-erp-danger">Sí, eliminar</button>
+        <a href="{% url 'proveedores:detalle' proveedor.pk %}" class="btn-erp-primary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

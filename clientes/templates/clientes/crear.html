@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Nuevo cliente{% endblock %}
+{% block nav_clientes %}active{% endblock %}
+
+{% block content %}
+<h2>👥 Nuevo cliente</h2>
+<div class="erp-card" style="max-width:580px;">
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn-erp-gold">Guardar</button>
+        <a href="{% url 'clientes:lista' %}" class="btn-erp-primary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

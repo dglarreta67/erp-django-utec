@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Eliminar — {{ producto.nombre }}{% endblock %}
+{% block nav_productos %}active{% endblock %}
+
+{% block content %}
+<h2>🗑️ Eliminar producto</h2>
+<div class="erp-card" style="max-width:540px;">
+    <div class="erp-alert-danger">
+        <strong>¿Eliminar "{{ producto.nombre }}"?</strong>
+    </div>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn-erp-danger">Sí, eliminar</button>
+        <a href="{% url 'productos:detalle' producto.pk %}" class="btn-erp-primary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Nueva venta{% endblock %}
+{% block nav_ventas %}active{% endblock %}
+
+{% block content %}
+<h2>💰 Nueva venta</h2>
+<form method="post">
+    {% csrf_token %}
+    <div class="erp-card">
+        <h4>Cliente</h4>
+        {{ venta_form.as_p }}
+    </div>
+    <div class="erp-card">
+        <h4>Detalle</h4>
+        {{ detalle_form.as_p }}
+    </div>
+    <button type="submit" class="btn-erp-gold">Registrar venta</button>
+    <a href="{% url 'ventas:lista' %}" class="btn-erp-primary">Cancelar</a>
+</form>
+{% endblock %}

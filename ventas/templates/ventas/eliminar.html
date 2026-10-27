@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Eliminar venta #{{ venta.pk }}{% endblock %}
+{% block nav_ventas %}active{% endblock %}
+
+{% block content %}
+<h2>🗑️ Eliminar venta</h2>
+<div class="erp-card" style="max-width:540px;">
+    <div class="erp-alert-danger">
+        <strong>¿Eliminar la venta #{{ venta.pk }}?</strong>
+    </div>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn-erp-danger">Sí, eliminar</button>
+        <a href="{% url 'ventas:detalle' venta.pk %}" class="btn-erp-primary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

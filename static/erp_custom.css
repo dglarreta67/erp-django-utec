@@ -1,0 +1,10 @@
+/* Custom AzulERP Fable 5 Overrides */
+.main-sidebar, .sidebar { background-color: #0A2342 !important; }
+.main-header.navbar { background-color: #0A2342 !important; }
+.brand-link { border-bottom: 1px solid #B8860B !important; }
+.brand-text { color: #D4AF37 !important; font-weight: 700 !important; }
+.nav-sidebar .nav-link { color: rgba(255,255,255,.82) !important; }
+.nav-sidebar .nav-link:hover, .nav-sidebar .nav-link.active {
+    background-color: #1B4F8A !important; color: #FFFFFF !important;
+}
+.main-footer { border-top: 2px solid #B8860B; }

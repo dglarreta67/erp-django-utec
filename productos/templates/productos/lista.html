@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Productos{% endblock %}
+{% block nav_productos %}active{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>📦 Productos</h2>
+    {% if user.is_authenticated %}<a href="{% url 'productos:crear' %}" class="btn-erp-gold">+ Nuevo producto</a>{% endif %}
+</div>
+
+{% if productos %}
+<table class="erp-table">
+    <thead>
+        <tr><th>#</th><th>Nombre</th><th>Categoría</th><th>Precio</th><th>Stock</th>{% if user.is_authenticated %}<th>Acciones</th>{% endif %}</tr>
+    </thead>
+    <tbody>
+        {% for p in productos %}
+        <tr>
+            <td><code>{{ p.pk }}</code></td>
+            <td><a href="{% url 'productos:detalle' p.pk %}">{{ p.nombre }}</a></td>
+            <td>{{ p.categoria }}</td>
+            <td>${{ p.precio }}</td>
+            <td>{{ p.stock }}</td>
+            {% if user.is_authenticated %}
+            <td>
+                <a href="{% url 'productos:editar' p.pk %}" class="btn-erp-primary btn-erp-sm">Editar</a>
+                <a href="{% url 'productos:eliminar' p.pk %}" class="btn-erp-danger btn-erp-sm">Eliminar</a>
+            </td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div class="erp-alert-info">No hay productos registrados aún.</div>
+{% endif %}
+{% endblock %}

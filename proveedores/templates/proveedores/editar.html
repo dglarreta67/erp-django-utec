@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Editar — {{ proveedor.nombre }}{% endblock %}
+{% block nav_proveedores %}active{% endblock %}
+
+{% block content %}
+<h2>✏️ Editar: {{ proveedor.nombre }}</h2>
+<div class="erp-card" style="max-width:580px;">
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn-erp-gold">Actualizar</button>
+        <a href="{% url 'proveedores:detalle' proveedor.pk %}" class="btn-erp-primary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

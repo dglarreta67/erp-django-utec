@@ -1,0 +1,1 @@
+# Reportes utiliza agregaciones sobre ventas y productos

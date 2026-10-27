@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}{{ proveedor.nombre }}{% endblock %}
+{% block nav_proveedores %}active{% endblock %}
+
+{% block content %}
+<h2>🏭 {{ proveedor.nombre }}</h2>
+<div class="erp-card">
+    <p>Contacto: {{ proveedor.contacto|default:"—" }}</p>
+    <p>Correo: {{ proveedor.correo }}</p>
+</div>
+<a href="{% url 'proveedores:lista' %}" class="btn-erp-primary">← Volver</a>
+{% endblock %}

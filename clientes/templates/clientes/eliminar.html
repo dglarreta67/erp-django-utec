@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Eliminar — {{ cliente.nombre }}{% endblock %}
+{% block nav_clientes %}active{% endblock %}
+
+{% block content %}
+<h2>🗑️ Eliminar cliente</h2>
+<div class="erp-card" style="max-width:540px;">
+    <div class="erp-alert-danger">
+        <strong>¿Eliminar a "{{ cliente.nombre }}"?</strong>
+    </div>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn-erp-danger">Sí, eliminar</button>
+        <a href="{% url 'clientes:detalle' cliente.pk %}" class="btn-erp-primary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

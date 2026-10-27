@@ -1,0 +1,13 @@
+env_erp/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+.env
+.git/
+.gitignore
+db.sqlite3
+staticfiles/
+media/
+*.md
+.vscode/

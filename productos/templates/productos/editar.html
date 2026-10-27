@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Editar — {{ producto.nombre }}{% endblock %}
+{% block nav_productos %}active{% endblock %}
+
+{% block content %}
+<h2>✏️ Editar: {{ producto.nombre }}</h2>
+<div class="erp-card" style="max-width:640px;">
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn-erp-gold">Actualizar</button>
+        <a href="{% url 'productos:detalle' producto.pk %}" class="btn-erp-primary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

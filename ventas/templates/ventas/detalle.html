@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Venta #{{ venta.pk }}{% endblock %}
+{% block nav_ventas %}active{% endblock %}
+
+{% block content %}
+<h2>💰 Venta #{{ venta.pk }}</h2>
+<div class="erp-card">
+    <p>Cliente: {{ venta.cliente }}</p>
+    <p>Fecha: {{ venta.fecha }}</p>
+    <p>Total: ${{ venta.total }}</p>
+</div>
+<a href="{% url 'ventas:lista' %}" class="btn-erp-primary">← Volver</a>
+{% endblock %}
