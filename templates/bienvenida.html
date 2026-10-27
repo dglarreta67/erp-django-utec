@@ -1,86 +1,34 @@
 {% extends "base.html" %}
-{% block title %}Inicio · MotoERP{% endblock %}
+{% block title %}Inicio{% endblock %}
 
 {% block content %}
-<!-- BANNER PRINCIPAL DE BIKER SHOP -->
-<div class="erp-card text-center py-4 mb-4" style="border-top: 5px solid var(--clr-speed-red);">
-    <div class="mb-2" style="font-size: 3rem;">🏁 🏍️ 🪖</div>
-    <h1 class="fw-bold" style="color: var(--clr-text);">MotoERP · Central Biker</h1>
-    <p class="lead mb-2" style="color: var(--clr-muted);">
-        Sistema de Gestión Integral para Motocicletas, Cascos, Refacciones y Equipamiento
+<div class="text-center py-4">
+    <h1 style="font-family:'Racing Sans One',sans-serif;
+               color:var(--clr-title);font-size:2.8rem;letter-spacing:.04em;">
+        <span class="helmet helmet-lg"></span> Moto Kimberly <span class="helmet helmet-lg"></span>
+    </h1>
+    <p style="color:var(--clr-muted);font-size:1.1rem;">
+        Sistema de gestión empresarial · UTEC Celaya · Espiral 1 W02
     </p>
-    <div class="d-flex justify-content-center gap-2 flex-wrap mt-3">
-        <span class="badge bg-danger px-3 py-2">🔥 Espiral 3</span>
-        <span class="badge bg-warning text-dark px-3 py-2 fw-bold">⚡ Sprint 2 Completo</span>
-        <span class="badge bg-dark px-3 py-2">🏁 Hito M3 · UTEC</span>
+    <div class="d-flex justify-content-center gap-2 mt-2 flex-wrap">
+        <span class="badge-erp-gold">Django 4.2 LTS</span>
+        <span class="badge-erp-gold">Python 3.11</span>
+        <span class="badge-erp-gold">Moto Kimberly ERP</span>
     </div>
 </div>
 
-<!-- TARJETAS DE MÓDULOS PRINCIPALES -->
-<div class="row g-4">
+<div class="row g-4 mt-2">
     {% for m in modulos %}
-    <div class="col-md-6 col-lg-3">
-        <div class="erp-card text-center h-100 d-flex flex-column justify-content-between transition-hover" style="border-top: 4px solid var(--clr-racing-yellow);">
-            <div>
-                <div class="my-3" style="font-size: 2.8rem; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.15));">
-                    {{ m.icono }}
-                </div>
-                <h4 class="fw-bold mb-2">{{ m.nombre }}</h4>
-                <p class="small text-muted mb-3">{{ m.descripcion }}</p>
-            </div>
-            <div class="pt-2">
-                <a href="{{ m.url }}" class="btn-erp-gold w-100 shadow-sm">
-                    Acceder Módulo ➔
-                </a>
-            </div>
-        </div>
-    </div>
-    {% empty %}
-    <!-- VISTA POR DEFECTO EN CASO DE QUE NO VENGA LA VARIABLE 'MODULOS' EN EL CONTEXTO -->
-    <div class="col-md-3">
-        <div class="erp-card text-center h-100 transition-hover" style="border-top: 4px solid var(--clr-racing-yellow);">
-            <div class="my-2" style="font-size: 2.8rem;">🏍️</div>
-            <h4 class="fw-bold">Productos</h4>
-            <p class="text-muted small">Catálogo de motos, cascos y repuestos.</p>
-            <a href="{% url 'productos:lista' %}" class="btn-erp-gold w-100">Acceder</a>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="erp-card text-center h-100 transition-hover" style="border-top: 4px solid var(--clr-racing-yellow);">
-            <div class="my-2" style="font-size: 2.8rem;">👥</div>
-            <h4 class="fw-bold">Clientes</h4>
-            <p class="text-muted small">Registro de la comunidad biker.</p>
-            <a href="{% url 'clientes:lista' %}" class="btn-erp-gold w-100">Acceder</a>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="erp-card text-center h-100 transition-hover" style="border-top: 4px solid var(--clr-racing-yellow);">
-            <div class="my-2" style="font-size: 2.8rem;">🏢</div>
-            <h4 class="fw-bold">Proveedores</h4>
-            <p class="text-muted small">Distribuidores y fabricantes de equipo.</p>
-            <a href="{% url 'proveedores:lista' %}" class="btn-erp-gold w-100">Acceder</a>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="erp-card text-center h-100 transition-hover" style="border-top: 4px solid var(--clr-racing-yellow);">
-            <div class="my-2" style="font-size: 2.8rem;">🏁</div>
-            <h4 class="fw-bold">Ventas</h4>
-            <p class="text-muted small">Historial de órdenes e ingresos.</p>
-            <a href="{% url 'ventas:lista' %}" class="btn-erp-gold w-100">Acceder</a>
+    <div class="col-md-4">
+        <div class="erp-card text-center"
+             style="cursor:pointer;" onclick="window.location='{{ m.url }}'">
+            <div style="font-size:2.4rem;margin-bottom:.4rem;">{% cycle '🏍️' '🪖' '🏁' '🛣️' '⛽' '🔧' %}</div>
+            <strong style="font-family:'Racing Sans One',sans-serif;letter-spacing:.03em;font-size:1.25rem;color:var(--clr-title);">{{ m.nombre }}</strong>
+            <p style="color:var(--clr-muted);font-size:.9rem;margin:.3rem 0 0;">
+                {{ m.descripcion }}
+            </p>
         </div>
     </div>
     {% endfor %}
 </div>
-
-<!-- ESTILOS INTERACTIVOS EXTRA -->
-<style>
-    .transition-hover {
-        transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-    }
-    .transition-hover:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.18);
-        border-top-color: var(--clr-speed-red) !important;
-    }
-</style>
 {% endblock %}

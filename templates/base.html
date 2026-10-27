@@ -3,349 +3,544 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}MotoERP{% endblock %} · Motos & Cascos UTEC</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="theme-color" content="#B3001B">
+    <title>{% block title %}Moto Kimberly ERP{% endblock %} · UTEC Celaya</title>
+
+    <!-- Google Fonts: Racing Sans One (títulos/menú) + Nunito (texto) + JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Racing+Sans+One&family=Nunito:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+          rel="stylesheet">
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
     <style>
+        /* TOKENS MODO DÍA (rojo moto) */
         :root, [data-theme="light"] {
-            --clr-asphalt: #121417;
-            --clr-speed-red: #D90429;
-            --clr-racing-yellow: #FFB703;
-            --clr-neon-orange: #FF5722;
-            --clr-chrome: #E0E1DD;
-            --clr-bg: #F4F6F8;
+            --clr-navy   : #B3001B;
+            --clr-royal  : #E10E2B;
+            --clr-sky    : #FF5A5F;
+            --clr-ice    : #FFECEC;
+            --clr-gold   : #1E1E22;
+            --clr-amber  : #FFC107;
+            --clr-cream  : #FFF3D6;
+            --clr-bg     : #FFF1F1;
             --clr-surface: #FFFFFF;
-            --clr-text: #1E293B;
-            --clr-muted: #64748B;
-            --clr-border: #CBD5E1;
-            --clr-danger: #DC2626;
-            --clr-ok: #16A34A;
+            --clr-text   : #2B1114;
+            --clr-muted  : #7A4A50;
+            --clr-border : #F5B5BB;
+            --clr-danger : #C0392B;
+            --clr-ok     : #1A7A4A;
+            --clr-title  : #B3001B;
+            --dot        : #FFD6D9;
+            --shadow-sm  : 0 2px 8px rgba(179,0,27,.16);
+            --shadow-md  : 0 8px 22px rgba(179,0,27,.30);
+            --gem-opacity: .28;
         }
+        /* TOKENS MODO NOCHE (rojo oscuro / asfalto) */
         [data-theme="dark"] {
-            --clr-asphalt: #090A0F;
-            --clr-speed-red: #EF233C;
-            --clr-racing-yellow: #FFC107;
-            --clr-neon-orange: #FF7043;
-            --clr-chrome: #8D99AE;
-            --clr-bg: #0F172A;
-            --clr-surface: #1E293B;
-            --clr-text: #F1F5F9;
-            --clr-muted: #94A3B8;
-            --clr-border: #334155;
-            --clr-danger: #EF4444;
-            --clr-ok: #22C55E;
+            --clr-navy   : #8E0016;
+            --clr-royal  : #C20D26;
+            --clr-sky    : #FF6B70;
+            --clr-ice    : #2E1013;
+            --clr-gold   : #F2F2F2;
+            --clr-amber  : #FFD54A;
+            --clr-cream  : #3A2F1A;
+            --clr-bg     : #170708;
+            --clr-surface: #260C0F;
+            --clr-text   : #FFE8E8;
+            --clr-muted  : #D8A0A6;
+            --clr-border : #5E1F26;
+            --clr-danger : #FF7B6B;
+            --clr-ok     : #5BE08F;
+            --clr-title  : #FF6B70;
+            --dot        : #2A0E11;
+            --shadow-sm  : 0 2px 8px rgba(0,0,0,.4);
+            --shadow-md  : 0 8px 22px rgba(0,0,0,.5);
+            --gem-opacity: .2;
         }
 
-        body { 
-            background: var(--clr-bg); 
-            color: var(--clr-text); 
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
-            margin: 0; 
-            transition: background 0.3s ease, color 0.3s ease;
+        /* CASCO ROJO (SVG) — .bow se conserva como alias por si otras plantillas lo usan */
+        :root {
+            --helmet: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 56'%3E%3Cpath d='M5 38C5 18 19 5 36 5C52 5 61 18 61 34V44C61 48 58 51 54 51H15C9 51 5 46 5 38Z' fill='%23E10E2B' stroke='%23560010' stroke-width='3' stroke-linejoin='round'/%3E%3Cpath d='M33 21H58C60 25 61 30 61 35H33Z' fill='%23222222' stroke='%23560010' stroke-width='2' stroke-linejoin='round'/%3E%3Cpath d='M12 26C16 17 24 12 33 11' fill='none' stroke='%23FFFFFF' stroke-width='3' stroke-linecap='round' opacity='.75'/%3E%3Cpath d='M8 43H30' stroke='%23FFFFFF' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M40 25H55' stroke='%23FFFFFF' stroke-width='2' stroke-linecap='round' opacity='.5'/%3E%3C/svg%3E");
         }
+        .helmet, .bow {
+            display: inline-block;
+            width: 1.6em; height: 1.4em;
+            vertical-align: -.3em;
+            background: var(--helmet) center / contain no-repeat;
+            filter: drop-shadow(0 2px 2px rgba(0,0,0,.35));
+        }
+        .helmet-lg, .bow-lg { width: 2.6em; height: 2.2em; }
 
-        /* --- NAVBAR TEMÁTICO --- */
-        .erp-navbar { 
-            background: var(--clr-asphalt); 
-            border-bottom: 3px solid var(--clr-speed-red); 
-            padding: .65rem 1.5rem; 
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between; 
-            position: relative;
-            z-index: 10;
-        }
-        .erp-brand { 
-            color: var(--clr-racing-yellow) !important; 
-            font-size: 1.4rem; 
-            font-weight: 800; 
-            text-decoration: none; 
-            letter-spacing: .5px;
-            display: flex;
-            align-items: center;
-            gap: .5rem;
-        }
-        .erp-nav-link { 
-            color: rgba(255,255,255,.85) !important; 
-            padding: .4rem .85rem; 
-            text-decoration: none; 
-            font-weight: 600;
-            transition: all .2s ease;
-        }
-        .erp-nav-link:hover, .erp-nav-link.active { 
-            background: var(--clr-speed-red); 
-            color: #FFF !important;
-            border-radius: 6px; 
-        }
-
-        /* Botón Modo Oscuro/Claro */
-        .btn-theme-toggle {
-            background: var(--clr-surface);
+        /* BASE */
+        *, *::before, *::after { box-sizing: border-box; }
+        body {
+            font-family: 'Nunito','Segoe UI',sans-serif;
+            font-size: 15px;
+            background-color: var(--clr-bg);
+            background-image: repeating-linear-gradient(45deg, var(--dot) 0 2px, transparent 2px 24px);
+            background-attachment: fixed;
             color: var(--clr-text);
-            border: 2px solid var(--clr-racing-yellow);
-            padding: .35rem .75rem;
-            border-radius: 20px;
-            font-weight: 700;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: .4rem;
-            font-size: .85rem;
-            transition: all .2s ease;
-            margin-left: .8rem;
+            line-height: 1.6;
+            transition: background-color .25s, color .25s;
+            margin: 0;
         }
-        .btn-theme-toggle:hover {
-            transform: scale(1.05);
-            background: var(--clr-racing-yellow);
-            color: var(--clr-asphalt);
+        h1, h2, h3, h4, h5 {
+            font-family: 'Racing Sans One','Nunito',sans-serif;
+            color: var(--clr-title);
+            letter-spacing: .02em;
+        }
+        :focus-visible {
+            outline: 3px solid var(--clr-amber);
+            outline-offset: 2px;
         }
 
-        /* --- PISTA Y ANIMACIÓN DE MOTOS --- */
-        .road-container {
-            position: relative;
-            width: 100%;
-            height: 70px;
-            background: #18191c;
+        /* CASCOS FLOTANDO DE FONDO */
+        #gemLayer {
+            position: fixed; inset: 0;
+            z-index: 0; pointer-events: none;
             overflow: hidden;
-            border-bottom: 4px solid var(--clr-racing-yellow);
-            box-shadow: inset 0 10px 15px -3px rgba(0,0,0,0.7);
+            opacity: var(--gem-opacity);
         }
-        .road-lines {
+        .bg-helmet {
             position: absolute;
-            top: 50%;
-            left: 0;
-            width: 200%;
-            height: 4px;
+            animation: floaty 5s ease-in-out infinite;
+        }
+        .bg-helmet svg { width: 100%; height: 100%; display: block; }
+        @keyframes floaty {
+            0%, 100% { translate: 0 0; }
+            50%      { translate: 0 -10px; }
+        }
+
+        /* NAVBAR */
+        .erp-navbar {
+            position: relative; z-index: 3;
+            background: linear-gradient(90deg, var(--clr-navy), var(--clr-royal));
+            padding: .65rem 1.5rem;
+            display: flex; align-items: center;
+            justify-content: space-between; flex-wrap: wrap; gap: .5rem;
+            box-shadow: var(--shadow-md);
+        }
+        .erp-navbar::after {            /* banda de meta a cuadros */
+            content: "";
+            position: absolute; left: 0; right: 0; bottom: -10px; height: 10px;
+            background: repeating-conic-gradient(#111 0 25%, #fff 0 50%) 0 0 / 20px 20px;
+        }
+        .erp-brand {
+            font-family: 'Racing Sans One',sans-serif;
+            font-size: 1.5rem;
+            color: #FFFFFF !important;
+            text-decoration: none; letter-spacing: .04em;
+            text-shadow: 0 2px 0 rgba(0,0,0,.35);
+        }
+        .erp-brand span.sub { color: rgba(255,255,255,.85); font-family: 'Nunito',sans-serif; font-weight: 600; font-size: .6em; }
+        .erp-nav-links { display: flex; align-items: center; gap: .25rem; flex-wrap: wrap; }
+        .erp-nav-link {
+            color: #FFFFFF !important;
+            font-family: 'Racing Sans One',sans-serif;
+            font-size: 1.05rem; letter-spacing: .04em;
+            text-transform: uppercase;
+            padding: .2rem .85rem; border-radius: 8px;
+            transform: skewX(-8deg);
+            text-decoration: none;
+            transition: background .2s, color .2s;
+        }
+        .erp-nav-link:hover, .erp-nav-link.active {
+            background: #FFFFFF; color: var(--clr-title) !important;
+        }
+        .theme-toggle {
+            background: #FFFFFF; color: var(--clr-navy);
+            border: 2px solid #111; border-radius: 50%;
+            width: 34px; height: 34px; font-size: .95rem;
+            cursor: pointer; transition: transform .2s;
+        }
+        .theme-toggle:hover { transform: rotate(20deg) scale(1.08); }
+
+        /* CONTENIDO */
+        .erp-main { position: relative; z-index: 1; padding: 2.5rem 0 2rem; min-height: calc(100vh - 330px); }
+
+        /* CARDS */
+        .erp-card {
+            position: relative;
+            background: var(--clr-surface);
+            border: 2.5px solid var(--clr-border);
+            border-radius: 16px; box-shadow: var(--shadow-sm);
+            padding: 1.5rem; margin-bottom: 1.5rem;
+            transition: box-shadow .2s, transform .2s;
+        }
+        .erp-card:hover { box-shadow: var(--shadow-md); transform: translateY(-4px); }
+        .erp-card::after {               /* casco en la esquina */
+            content: "";
+            position: absolute; top: -22px; right: 10px;
+            width: 54px; height: 46px;
+            background: var(--helmet) center / contain no-repeat;
+            transform: rotate(12deg);
+            filter: drop-shadow(0 2px 2px rgba(0,0,0,.35));
+            pointer-events: none;
+        }
+        .erp-card-header {
+            background: var(--clr-navy); color: #FFF;
+            border-radius: 12px 12px 0 0;
+            padding: .85rem 1.25rem;
+            border-left: 6px solid var(--clr-amber);
+            font-family: 'Racing Sans One',sans-serif;
+            font-size: 1.1rem; letter-spacing: .04em;
+            margin: -1.5rem -1.5rem 1.5rem;
+        }
+
+        /* TABLAS */
+        .erp-table {
+            width: 100%; border-collapse: separate; border-spacing: 0;
+            border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-sm);
+            border: 2px solid var(--clr-border);
+        }
+        .erp-table thead th {
+            background: var(--clr-navy); color: #FFF;
+            font-family: 'Racing Sans One',sans-serif;
+            font-weight: 400; font-size: .92rem; letter-spacing: .05em;
+            padding: .75rem 1rem; border-bottom: 3px solid var(--clr-amber);
+        }
+        .erp-table tbody td {
+            background: var(--clr-surface); padding: .65rem 1rem;
+            border-bottom: 1px solid var(--clr-border); font-size: .92rem;
+        }
+        .erp-table tbody tr:nth-child(even) td { background: var(--clr-ice); }
+        .erp-table tbody tr:hover td { background: rgba(225,14,43,.12); }
+        .erp-table tfoot td {
+            background: var(--clr-cream); color: var(--clr-title);
+            font-weight: 700; border-top: 2px solid var(--clr-navy);
+        }
+
+        /* BOTONES */
+        .btn-erp-primary {
+            background: var(--clr-navy); color: #FFF;
+            border: 2px solid #111; border-radius: 10px;
+            padding: .45rem 1.3rem; font-family: 'Racing Sans One',sans-serif;
+            letter-spacing: .03em; font-size: .95rem;
+            cursor: pointer; text-decoration: none; display: inline-block;
+            transition: background .2s, transform .15s;
+        }
+        .btn-erp-primary:hover { background: #111; color: #FFF; transform: scale(1.04); }
+        .btn-erp-gold {
+            background: #111; color: #FFF;
+            border: 2px solid var(--clr-amber); border-radius: 10px;
+            padding: .45rem 1.3rem; font-family: 'Racing Sans One',sans-serif;
+            letter-spacing: .03em;
+            cursor: pointer; text-decoration: none; display: inline-block;
+            transition: background .2s, transform .15s;
+        }
+        .btn-erp-gold:hover { background: var(--clr-amber); color: #111; transform: scale(1.04); }
+        .btn-erp-danger {
+            background: var(--clr-danger); color: #FFF; border: none;
+            border-radius: 10px; padding: .4rem 1.1rem;
+            font-family: 'Racing Sans One',sans-serif; font-size: .9rem;
+            cursor: pointer; text-decoration: none; display: inline-block;
+        }
+        .btn-erp-sm { padding: .25rem .8rem; font-size: .82rem; }
+
+        /* FORMULARIOS */
+        .erp-label {
+            font-family: 'Racing Sans One',sans-serif;
+            font-size: .9rem; color: var(--clr-muted);
+            letter-spacing: .03em;
+            display: block; margin-bottom: .3rem;
+        }
+        .erp-input {
+            background: var(--clr-surface); border: 2px solid var(--clr-border);
+            border-radius: 10px; color: var(--clr-text);
+            padding: .5rem .95rem; width: 100%; font-size: .95rem;
+            transition: border-color .2s, box-shadow .2s;
+        }
+        .erp-input:focus {
+            outline: none; border-color: var(--clr-navy);
+            box-shadow: 0 0 0 4px rgba(225,14,43,.25);
+        }
+
+        /* BADGES */
+        .badge-erp-active {
+            background: rgba(26,122,74,.12); color: var(--clr-ok);
+            border: 1px solid currentColor;
+            font-size: .78rem; padding: .2rem .7rem;
+            border-radius: 20px; font-weight: 700;
+        }
+        .badge-erp-inactive {
+            background: rgba(192,57,43,.1); color: var(--clr-danger);
+            border: 1px solid currentColor;
+            font-size: .78rem; padding: .2rem .7rem; border-radius: 20px;
+        }
+        .badge-erp-gold {
+            background: var(--clr-surface); color: var(--clr-title);
+            border: 2px solid var(--clr-navy);
+            font-size: .78rem; padding: .2rem .8rem;
+            border-radius: 20px; font-weight: 700;
+        }
+
+        /* ALERTAS */
+        .erp-alert-danger {
+            background: rgba(192,57,43,.08); border: 1px solid rgba(192,57,43,.3);
+            border-left: 6px solid var(--clr-danger); border-radius: 12px;
+            padding: 1rem 1.25rem;
+        }
+        .erp-alert-info {
+            background: var(--clr-ice); border: 1px solid var(--clr-border);
+            border-left: 6px solid var(--clr-sky); border-radius: 12px;
+            padding: 1rem 1.25rem;
+        }
+        .erp-alert-success {
+            background: rgba(26,122,74,.08); border: 1px solid rgba(26,122,74,.3);
+            border-left: 6px solid var(--clr-ok); border-radius: 12px;
+            padding: 1rem 1.25rem;
+        }
+
+        /* TÍTULO DE PÁGINA */
+        .erp-page-title {
+            display: flex; align-items: center; gap: 1rem;
+            margin-bottom: 1.5rem; padding-bottom: .75rem;
+            border-bottom: 3px dashed var(--clr-sky);
+        }
+        .erp-page-title h2 {
+            font-size: 1.7rem; color: var(--clr-title); margin: 0;
+        }
+
+        /* CÓDIGO */
+        code, .mono {
+            font-family: 'JetBrains Mono',Consolas,monospace;
+            font-size: .85em; color: var(--clr-title);
+            background: var(--clr-ice); padding: .1em .4em; border-radius: 6px;
+        }
+
+        /* CARRETERA CON MOTOS */
+        .road {
+            position: relative; z-index: 1;
+            height: 150px; margin-top: 1rem;
+            background: #2A2A2E;
+            border-top: 5px solid #FFFFFF;
+            border-bottom: 5px solid #FFFFFF;
+            overflow: hidden;
+        }
+        .road::before {                 /* línea central discontinua que avanza */
+            content: "";
+            position: absolute; left: 0; right: 0; top: 50%; height: 5px;
             transform: translateY(-50%);
-            background: repeating-linear-gradient(90deg, var(--clr-racing-yellow) 0px, var(--clr-racing-yellow) 35px, transparent 35px, transparent 70px);
-            animation: moveRoad 0.6s linear infinite;
+            background: repeating-linear-gradient(90deg, #FFC107 0 40px, transparent 40px 80px);
+            animation: dash 1.2s linear infinite;
         }
-        @keyframes moveRoad {
-            0% { transform: translate(0, -50%); }
-            100% { transform: translate(-70px, -50%); }
-        }
+        @keyframes dash { to { background-position: 80px 0; } }
 
-        .bike-runner {
-            position: absolute;
-            z-index: 3;
-            display: flex;
-            align-items: center;
-            filter: drop-shadow(2px 5px 4px rgba(0,0,0,0.6));
-            animation: driveBike linear infinite;
+        .rider {
+            position: absolute; left: 0;
+            width: 110px; height: 64px;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
         }
+        .rider svg { display: block; animation: bob .35s ease-in-out infinite alternate; }
+        .rider.l1 { bottom: 10px; animation-name: ride-right; }
+        .rider.l2 { top: 10px;    animation-name: ride-left; }
+        @keyframes ride-right {
+            from { transform: translateX(-160px); }
+            to   { transform: translateX(calc(100vw + 160px)); }
+        }
+        @keyframes ride-left {
+            from { transform: translateX(calc(100vw + 160px)) scaleX(-1); }
+            to   { transform: translateX(-160px) scaleX(-1); }
+        }
+        @keyframes bob {
+            from { transform: translateY(0); }
+            to   { transform: translateY(-2px); }
+        }
+        .wheel {
+            transform-box: fill-box; transform-origin: center;
+            animation: spin .4s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-        .bike-1 {
-            bottom: 6px;
-            font-size: 2.2rem;
-            animation-duration: 4.5s;
-            animation-delay: 0s;
+        /* FOOTER */
+        .erp-footer {
+            position: relative; z-index: 2;
+            background: linear-gradient(90deg, var(--clr-navy), var(--clr-royal));
+            color: #FFFFFF;
+            font-family: 'Racing Sans One',sans-serif; letter-spacing: .04em;
+            text-align: center; font-size: .9rem;
+            padding: .75rem;
         }
-        .bike-2 {
-            top: 6px;
-            font-size: 1.8rem;
-            animation-duration: 7s;
-            animation-delay: 2s;
+        @media (prefers-reduced-motion: reduce) {
+            * { transition: none !important; animation: none !important; }
+            .erp-card:hover { transform: none; }
+            .rider { left: var(--x, 20%); transform: none !important; }
+            .rider.l2 { transform: scaleX(-1) !important; }
         }
-        .bike-3 {
-            bottom: 12px;
-            font-size: 2rem;
-            animation-duration: 5.8s;
-            animation-delay: 3.8s;
-        }
-
-        @keyframes driveBike {
-            0% { left: -120px; }
-            100% { left: 105vw; }
-        }
-
-        .speed-trail {
-            display: inline-block;
-            font-size: 1rem;
-            margin-right: -4px;
-            opacity: 0.8;
-        }
-
-        /* --- TARJETAS Y COMPONENTES ERP --- */
-        .erp-card { 
-            background: var(--clr-surface); 
-            border: 1px solid var(--clr-border); 
-            border-radius: 12px; 
-            padding: 1.5rem; 
-            margin-bottom: 1.5rem; 
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-            transition: background 0.3s ease, border-color 0.3s ease;
-        }
-        .erp-card-header { 
-            background: var(--clr-asphalt); 
-            color: #FFF; 
-            padding: .85rem 1.25rem; 
-            border-left: 5px solid var(--clr-speed-red); 
-            margin: -1.5rem -1.5rem 1.5rem; 
-            border-radius: 11px 11px 0 0; 
-            font-weight: 700;
-        }
-        .erp-table { width: 100%; border-collapse: collapse; }
-        .erp-table th { 
-            background: var(--clr-asphalt); 
-            color: #FFF; 
-            padding: .75rem; 
-            border-bottom: 3px solid var(--clr-speed-red); 
-            text-align: left; 
-        }
-        .erp-table td { padding: .65rem; border-bottom: 1px solid var(--clr-border); }
-
-        .btn-erp-gold { 
-            background: var(--clr-racing-yellow); 
-            color: var(--clr-asphalt); 
-            border: none; 
-            padding: .45rem 1.2rem; 
-            border-radius: 8px; 
-            font-weight: 700; 
-            text-decoration: none; 
-            cursor: pointer; 
-            display: inline-block;
-        }
-        .btn-erp-primary { 
-            background: var(--clr-speed-red); 
-            color: #FFF; 
-            border: none; 
-            padding: .45rem 1.2rem; 
-            border-radius: 8px; 
-            font-weight: 600;
-            text-decoration: none; 
-            display: inline-block;
-        }
-        .btn-erp-danger { 
-            background: var(--clr-danger); 
-            color: #FFF; 
-            border: none; 
-            padding: .4rem 1rem; 
-            border-radius: 8px; 
-            text-decoration: none; 
-            display: inline-block;
-        }
-        .btn-erp-sm { padding: .25rem .7rem; font-size: .8rem; }
-        .erp-input { 
-            width: 100%; 
-            padding: .5rem; 
-            border: 1.5px solid var(--clr-border); 
-            border-radius: 8px; 
-            background: var(--clr-surface); 
-            color: var(--clr-text); 
-        }
-
-        .badge-erp-active { 
-            background: rgba(22, 163, 74, .15); 
-            color: var(--clr-ok); 
-            border: 1px solid currentColor; 
-            padding: .2rem .6rem; 
-            border-radius: 20px; 
-            font-size: .75rem; 
-            font-weight: 700;
-        }
-        .badge-erp-inactive { 
-            background: rgba(220, 38, 38, .15); 
-            color: var(--clr-danger); 
-            border: 1px solid currentColor; 
-            padding: .2rem .6rem; 
-            border-radius: 20px; 
-            font-size: .75rem; 
-            font-weight: 700;
-        }
-        .erp-alert-success { background: rgba(22, 163, 74, .12); border-left: 5px solid var(--clr-ok); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; }
-        .erp-alert-danger { background: rgba(220, 38, 38, .12); border-left: 5px solid var(--clr-danger); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; }
     </style>
+    {% block extra_css %}{% endblock %}
 </head>
+
 <body>
 
-<!-- NAVBAR PRINCIPAL -->
-<nav class="erp-navbar">
-    <a class="erp-brand" href="/">
-        <span>🏍️</span> MotoERP <small class="d-none d-md-inline" style="font-size: 0.75rem; color: var(--clr-chrome); font-weight: normal;">| Cascos & Biker Shop</small>
-    </a>
-    <div class="d-flex align-items-center flex-wrap">
-        <a href="{% url 'productos:lista' %}" class="erp-nav-link {% block nav_productos %}{% endblock %}">🏍️ Motos y Cascos</a>
-        <a href="{% url 'clientes:lista' %}" class="erp-nav-link {% block nav_clientes %}{% endblock %}">👥 Clientes</a>
-        <a href="{% url 'proveedores:lista' %}" class="erp-nav-link {% block nav_proveedores %}{% endblock %}">🏢 Proveedores</a>
-        <a href="{% url 'ventas:lista' %}" class="erp-nav-link {% block nav_ventas %}{% endblock %}">🏁 Ventas</a>
-        <a href="{% url 'admin:index' %}" class="erp-nav-link" target="_blank">⚙️ Admin</a>
-        {% if user.is_authenticated %}
-            <a href="{% url 'account_logout' %}" class="erp-nav-link">Salir ({{ user.username }})</a>
-        {% else %}
-            <a href="{% url 'account_login' %}" class="erp-nav-link">Entrar</a>
-        {% endif %}
+<!-- CAPA DE CASCOS DE FONDO -->
+<div id="gemLayer" aria-hidden="true"></div>
 
-        <!-- BOTÓN MODO OSCURO / CLARO -->
-        <button id="theme-toggle" class="btn-theme-toggle" type="button" aria-label="Cambiar tema">
-            <span id="theme-toggle-icon">🌙</span>
-            <span id="theme-toggle-text" class="d-none d-lg-inline">Oscuro</span>
-        </button>
+<!-- NAVBAR -->
+<nav class="erp-navbar">
+    <a class="erp-brand" href="/"><span class="helmet"></span> Moto Kimberly <span class="sub">· UTEC Celaya</span></a>
+    <div class="erp-nav-links">
+        <a href="/productos/" class="erp-nav-link {% block nav_productos %}{% endblock %}">Productos</a>
+        <a href="/clientes/" class="erp-nav-link {% block nav_clientes %}{% endblock %}">Clientes</a>
+        <a href="/proveedores/" class="erp-nav-link {% block nav_proveedores %}{% endblock %}">Proveedores</a>
+        <a href="/ventas/" class="erp-nav-link {% block nav_ventas %}{% endblock %}">Ventas</a>
+        <a href="/reportes/" class="erp-nav-link {% block nav_reportes %}{% endblock %}">Reportes</a>
+        <a href="/admin/" class="erp-nav-link">Admin</a>
+        {% if user.is_authenticated %}
+            <a href="/accounts/logout/" class="erp-nav-link">Salir ({{ user.username }})</a>
+        {% else %}
+            <a href="/accounts/login/" class="erp-nav-link">Entrar</a>
+        {% endif %}
+        <button class="theme-toggle" id="themeBtn" title="Modo claro/oscuro">🌙</button>
     </div>
 </nav>
 
-<!-- CARRETERA CON MOTOS ANIMADAS -->
-<div class="road-container">
-    <div class="road-lines"></div>
-    
-    <div class="bike-runner bike-1">
-        <span class="speed-trail">💨</span>🏍️
-    </div>
-    
-    <div class="bike-runner bike-2">
-        <span class="speed-trail">💨</span>🛵
-    </div>
-
-    <div class="bike-runner bike-3">
-        <span class="speed-trail">🔥</span>🏍️
-    </div>
-</div>
-
-<!-- MENSAJES DEL SISTEMA -->
+<!-- MENSAJES FLASH -->
 {% if messages %}
-<div class="container mt-3">
+<div class="container mt-4" style="position:relative;z-index:1;">
     {% for m in messages %}
-    <div class="erp-alert-{% if m.tags == 'error' %}danger{% else %}success{% endif %}">
-        {{ m }}
+    <div class="erp-alert-{% if m.tags == 'error' %}danger{% elif m.tags == 'success' %}success{% else %}info{% endif %} d-flex justify-content-between align-items-center mb-2"
+         role="alert">
+        <span>{{ m }}</span>
+        <button onclick="this.parentElement.style.display='none'"
+                style="background:none;border:none;cursor:pointer;font-size:1.1rem;color:inherit;">×</button>
     </div>
     {% endfor %}
 </div>
 {% endif %}
 
 <!-- CONTENIDO PRINCIPAL -->
-<main class="container py-4">
-    {% block content %}{% endblock %}
+<main class="erp-main">
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
 </main>
 
-<!-- SCRIPT MODO OSCURO / CLARO -->
-<script>
-    const themeToggleBtn = document.getElementById('theme-toggle');
-    const themeIcon = document.getElementById('theme-toggle-icon');
-    const themeText = document.getElementById('theme-toggle-text');
+<!-- CARRETERA CON MOTOS ANDANDO -->
+<div class="road" id="road" aria-hidden="true"></div>
 
-    const savedTheme = localStorage.getItem('theme');
-    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const initialTheme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
+<!-- FOOTER -->
+<footer class="erp-footer">
+    <span class="helmet"></span> Moto Kimberly ERP · Django 4.2 LTS · UTEC Celaya · Espiral 1 <span class="helmet"></span>
+</footer>
 
-    setTheme(initialTheme);
-
-    function setTheme(theme) {
-        document.documentElement.setAttribute('data-theme', theme);
-        localStorage.setItem('theme', theme);
-
-        if (theme === 'dark') {
-            themeIcon.textContent = '☀️';
-            themeText.textContent = 'Claro';
-        } else {
-            themeIcon.textContent = '🌙';
-            themeText.textContent = 'Oscuro';
-        }
-    }
-
-    themeToggleBtn.addEventListener('click', () => {
-        const currentTheme = document.documentElement.getAttribute('data-theme');
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        setTheme(newTheme);
-    });
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
 </script>
 
+<!-- Toggle modo noche -->
+<script>
+(function () {
+    var btn  = document.getElementById('themeBtn');
+    var html = document.documentElement;
+    var icons = { light: '🌙', dark: '☀️' };
+    var saved = localStorage.getItem('erpTheme') || 'light';
+    html.setAttribute('data-theme', saved);
+    if (btn) btn.textContent = icons[saved];
+    if (btn) {
+        btn.addEventListener('click', function () {
+            var current = html.getAttribute('data-theme');
+            var next    = current === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-theme', next);
+            btn.textContent = icons[next];
+            localStorage.setItem('erpTheme', next);
+        });
+    }
+})();
+</script>
+
+<!-- Cascos de fondo + motos en la carretera -->
+<script>
+(function () {
+    var seed = 20260;
+    function rnd() { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
+
+    /* Casco en SVG con color de carcasa */
+    function helmetSVG(color) {
+        return '<svg viewBox="0 0 64 56" xmlns="http://www.w3.org/2000/svg">' +
+            '<path d="M5 38C5 18 19 5 36 5C52 5 61 18 61 34V44C61 48 58 51 54 51H15C9 51 5 46 5 38Z" fill="' + color + '" stroke="#3a0008" stroke-width="3" stroke-linejoin="round"/>' +
+            '<path d="M33 21H58C60 25 61 30 61 35H33Z" fill="#222" stroke="#3a0008" stroke-width="2" stroke-linejoin="round"/>' +
+            '<path d="M12 26C16 17 24 12 33 11" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".75"/>' +
+            '<path d="M8 43H30" stroke="#fff" stroke-width="3" stroke-linecap="round"/>' +
+            '</svg>';
+    }
+
+    /* Moto con piloto, vista lateral, mirando a la derecha */
+    function wheel(cx) {
+        return '<g class="wheel">' +
+            '<circle cx="' + cx + '" cy="52" r="13" fill="#1b1b1b"/>' +
+            '<circle cx="' + cx + '" cy="52" r="8" fill="#ddd"/>' +
+            '<path d="M' + cx + ' 44V60M' + (cx - 8) + ' 52H' + (cx + 8) + 'M' + (cx - 5.7) + ' 46.3L' + (cx + 5.7) + ' 57.7M' + (cx + 5.7) + ' 46.3L' + (cx - 5.7) + ' 57.7" stroke="#777" stroke-width="1.5"/>' +
+            '<circle cx="' + cx + '" cy="52" r="2.5" fill="#444"/>' +
+            '</g>';
+    }
+    function motoSVG(color) {
+        return '<svg viewBox="0 0 120 70" width="110" height="64" xmlns="http://www.w3.org/2000/svg" style="--m:' + color + '">' +
+            wheel(24) + wheel(96) +
+            '<path d="M18 53L42 49" stroke="#999" stroke-width="3" stroke-linecap="round"/>' +
+            '<path d="M24 52L48 42H80L96 52" fill="none" stroke="#333" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>' +
+            '<path d="M96 52L86 28" stroke="#555" stroke-width="4" stroke-linecap="round"/>' +
+            '<path d="M46 42C48 30 64 27 80 32L88 40L84 44H48Z" style="fill:var(--m)" stroke="#222" stroke-width="1.5" stroke-linejoin="round"/>' +
+            '<path d="M26 40L50 38V43H24Z" fill="#222"/>' +
+            '<circle cx="88" cy="34" r="3" fill="#FFE98A"/>' +
+            '<path d="M54 38L66 46L62 54" fill="none" stroke="#333" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>' +
+            '<path d="M52 38L64 23" stroke="#1f1f1f" stroke-width="10" stroke-linecap="round"/>' +
+            '<path d="M64 25L84 28" stroke="#1f1f1f" stroke-width="5" stroke-linecap="round"/>' +
+            '<path d="M60 14C60 6 66 2 72 2C79 2 83 8 83 14V17H60Z" style="fill:var(--m)" stroke="#222" stroke-width="1.5" stroke-linejoin="round"/>' +
+            '<path d="M72 8H82C83 10 83 13 83 15H72Z" fill="#111"/>' +
+            '</svg>';
+    }
+
+    /* 1) Cascos flotando al fondo */
+    var layer = document.getElementById('gemLayer');
+    if (layer) {
+        var hc = ['#E10E2B','#B3001B','#FF5A5F','#222222','#F2F2F2','#FFC107'];
+        var count = window.innerWidth < 700 ? 16 : 34;
+        var frag = document.createDocumentFragment();
+        for (var i = 0; i < count; i++) {
+            var h = document.createElement('div');
+            var size = 26 + rnd() * 30;
+            h.className = 'bg-helmet';
+            h.style.width  = size + 'px';
+            h.style.height = (size * 0.875) + 'px';
+            h.style.left = (rnd() * 96) + '%';
+            h.style.top  = (rnd() * 96) + '%';
+            h.style.rotate = (rnd() * 60 - 30).toFixed(0) + 'deg';
+            h.style.animationDelay = (rnd() * 5).toFixed(2) + 's';
+            h.innerHTML = helmetSVG(hc[Math.floor(rnd() * hc.length)]);
+            frag.appendChild(h);
+        }
+        layer.appendChild(frag);
+    }
+
+    /* 2) Motos andando por la carretera (carril de abajo va a la derecha, el de arriba a la izquierda) */
+    var road = document.getElementById('road');
+    if (road) {
+        var riders = [
+            { lane: 'l1', color: '#E10E2B', dur: 9,  delay: -1 },
+            { lane: 'l1', color: '#FF8A00', dur: 12, delay: -6 },
+            { lane: 'l1', color: '#F2F2F2', dur: 7,  delay: -3.5 },
+            { lane: 'l2', color: '#B3001B', dur: 10, delay: -2 },
+            { lane: 'l2', color: '#FFC107', dur: 13, delay: -8 },
+            { lane: 'l2', color: '#E10E2B', dur: 8,  delay: -5 }
+        ];
+        riders.forEach(function (r, i) {
+            var d = document.createElement('div');
+            d.className = 'rider ' + r.lane;
+            d.style.animationDuration = r.dur + 's';
+            d.style.animationDelay = r.delay + 's';
+            d.style.setProperty('--x', (8 + i * 15) + '%');
+            d.innerHTML = motoSVG(r.color);
+            road.appendChild(d);
+        });
+    }
+})();
+</script>
+{% block extra_js %}{% endblock %}
 </body>
 </html>
