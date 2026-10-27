@@ -1,6 +1,6 @@
-from .settings import *
 import os
 import dj_database_url
+from .settings import *
 
 DEBUG = False
 SECRET_KEY = os.environ.get('SECRET_KEY', 'secret-key-prod-placeholder')
@@ -30,7 +30,15 @@ CSRF_COOKIE_SECURE = os.environ.get('CSRF_COOKIE_SECURE', 'False') == 'True'
 X_FRAME_OPTIONS = 'DENY'
 SECURE_CONTENT_TYPE_NOSNIFF = True
 
+# Desactivar verificación estricta de manifiesto (Evita errores con los sourcemaps de Jazzmin)
 WHITENOISE_MANIFEST_STRICT = False
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-WHITENOISE_MANIFEST_STRICT = False 
-WHITENOISE_MANIFEST_STRICT = False 
+
+# Configuración de estáticos para Django 4.2+ (Usa almacenamiento comprimido sin manifiesto estricto)
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+    },
+}
