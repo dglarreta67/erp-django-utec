@@ -3,61 +3,302 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}ERP Django{% endblock %} · UTEC Celaya</title>
+    <title>{% block title %}MotoERP{% endblock %} · Motos & Cascos UTEC</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         :root, [data-theme="light"] {
-            --clr-navy: #0A2342; --clr-royal: #1B4F8A; --clr-sky: #4A90D9;
-            --clr-ice: #E8F0FB; --clr-gold: #B8860B; --clr-amber: #D4A017;
-            --clr-cream: #FDF8E8; --clr-bg: #F5F7FA; --clr-surface: #FFFFFF;
-            --clr-text: #1A1A2E; --clr-muted: #5A6A7E; --clr-border: #C8D8EC;
-            --clr-danger: #C0392B; --clr-ok: #1A7A4A;
+            --clr-asphalt: #121417;
+            --clr-speed-red: #D90429;
+            --clr-racing-yellow: #FFB703;
+            --clr-neon-orange: #FF5722;
+            --clr-chrome: #E0E1DD;
+            --clr-bg: #F4F6F8;
+            --clr-surface: #FFFFFF;
+            --clr-text: #1E293B;
+            --clr-muted: #64748B;
+            --clr-border: #CBD5E1;
+            --clr-danger: #DC2626;
+            --clr-ok: #16A34A;
         }
         [data-theme="dark"] {
-            --clr-navy: #1E3A5F; --clr-royal: #2E5F9E; --clr-sky: #6BAEE8;
-            --clr-ice: #1A2A3A; --clr-gold: #D4AF37; --clr-amber: #E8C547;
-            --clr-cream: #2A2510; --clr-bg: #0D1B2A; --clr-surface: #142033;
-            --clr-text: #E2EAF4; --clr-muted: #8AA0B8; --clr-border: #2A3F58;
-            --clr-danger: #E74C3C; --clr-ok: #2ECC71;
+            --clr-asphalt: #090A0F;
+            --clr-speed-red: #EF233C;
+            --clr-racing-yellow: #FFC107;
+            --clr-neon-orange: #FF7043;
+            --clr-chrome: #8D99AE;
+            --clr-bg: #0F172A;
+            --clr-surface: #1E293B;
+            --clr-text: #F1F5F9;
+            --clr-muted: #94A3B8;
+            --clr-border: #334155;
+            --clr-danger: #EF4444;
+            --clr-ok: #22C55E;
         }
-        body { background: var(--clr-bg); color: var(--clr-text); font-family: sans-serif; margin: 0; }
-        .erp-navbar { background: var(--clr-navy); border-bottom: 3px solid var(--clr-gold); padding: .65rem 1.5rem; display: flex; align-items: center; justify-content: space-between; }
-        .erp-brand { color: var(--clr-gold) !important; font-size: 1.3rem; font-weight: 700; text-decoration: none; }
-        .erp-nav-link { color: rgba(255,255,255,.82) !important; padding: .35rem .75rem; text-decoration: none; }
-        .erp-nav-link:hover, .erp-nav-link.active { background: var(--clr-royal); border-radius: 6px; }
-        .erp-card { background: var(--clr-surface); border: 1px solid var(--clr-border); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; }
-        .erp-card-header { background: var(--clr-navy); color: #FFF; padding: .85rem 1.25rem; border-left: 5px solid var(--clr-gold); margin: -1.5rem -1.5rem 1.5rem; border-radius: 10px 10px 0 0; }
+
+        body { 
+            background: var(--clr-bg); 
+            color: var(--clr-text); 
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
+            margin: 0; 
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* --- NAVBAR TEMÁTICO --- */
+        .erp-navbar { 
+            background: var(--clr-asphalt); 
+            border-bottom: 3px solid var(--clr-speed-red); 
+            padding: .65rem 1.5rem; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            position: relative;
+            z-index: 10;
+        }
+        .erp-brand { 
+            color: var(--clr-racing-yellow) !important; 
+            font-size: 1.4rem; 
+            font-weight: 800; 
+            text-decoration: none; 
+            letter-spacing: .5px;
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+        }
+        .erp-nav-link { 
+            color: rgba(255,255,255,.85) !important; 
+            padding: .4rem .85rem; 
+            text-decoration: none; 
+            font-weight: 600;
+            transition: all .2s ease;
+        }
+        .erp-nav-link:hover, .erp-nav-link.active { 
+            background: var(--clr-speed-red); 
+            color: #FFF !important;
+            border-radius: 6px; 
+        }
+
+        /* Botón Modo Oscuro/Claro */
+        .btn-theme-toggle {
+            background: var(--clr-surface);
+            color: var(--clr-text);
+            border: 2px solid var(--clr-racing-yellow);
+            padding: .35rem .75rem;
+            border-radius: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: .4rem;
+            font-size: .85rem;
+            transition: all .2s ease;
+            margin-left: .8rem;
+        }
+        .btn-theme-toggle:hover {
+            transform: scale(1.05);
+            background: var(--clr-racing-yellow);
+            color: var(--clr-asphalt);
+        }
+
+        /* --- PISTA Y ANIMACIÓN DE MOTOS --- */
+        .road-container {
+            position: relative;
+            width: 100%;
+            height: 70px;
+            background: #18191c;
+            overflow: hidden;
+            border-bottom: 4px solid var(--clr-racing-yellow);
+            box-shadow: inset 0 10px 15px -3px rgba(0,0,0,0.7);
+        }
+        .road-lines {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 200%;
+            height: 4px;
+            transform: translateY(-50%);
+            background: repeating-linear-gradient(90deg, var(--clr-racing-yellow) 0px, var(--clr-racing-yellow) 35px, transparent 35px, transparent 70px);
+            animation: moveRoad 0.6s linear infinite;
+        }
+        @keyframes moveRoad {
+            0% { transform: translate(0, -50%); }
+            100% { transform: translate(-70px, -50%); }
+        }
+
+        .bike-runner {
+            position: absolute;
+            z-index: 3;
+            display: flex;
+            align-items: center;
+            filter: drop-shadow(2px 5px 4px rgba(0,0,0,0.6));
+            animation: driveBike linear infinite;
+        }
+
+        .bike-1 {
+            bottom: 6px;
+            font-size: 2.2rem;
+            animation-duration: 4.5s;
+            animation-delay: 0s;
+        }
+        .bike-2 {
+            top: 6px;
+            font-size: 1.8rem;
+            animation-duration: 7s;
+            animation-delay: 2s;
+        }
+        .bike-3 {
+            bottom: 12px;
+            font-size: 2rem;
+            animation-duration: 5.8s;
+            animation-delay: 3.8s;
+        }
+
+        @keyframes driveBike {
+            0% { left: -120px; }
+            100% { left: 105vw; }
+        }
+
+        .speed-trail {
+            display: inline-block;
+            font-size: 1rem;
+            margin-right: -4px;
+            opacity: 0.8;
+        }
+
+        /* --- TARJETAS Y COMPONENTES ERP --- */
+        .erp-card { 
+            background: var(--clr-surface); 
+            border: 1px solid var(--clr-border); 
+            border-radius: 12px; 
+            padding: 1.5rem; 
+            margin-bottom: 1.5rem; 
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+        .erp-card-header { 
+            background: var(--clr-asphalt); 
+            color: #FFF; 
+            padding: .85rem 1.25rem; 
+            border-left: 5px solid var(--clr-speed-red); 
+            margin: -1.5rem -1.5rem 1.5rem; 
+            border-radius: 11px 11px 0 0; 
+            font-weight: 700;
+        }
         .erp-table { width: 100%; border-collapse: collapse; }
-        .erp-table th { background: var(--clr-navy); color: #FFF; padding: .75rem; border-bottom: 3px solid var(--clr-gold); text-align: left; }
+        .erp-table th { 
+            background: var(--clr-asphalt); 
+            color: #FFF; 
+            padding: .75rem; 
+            border-bottom: 3px solid var(--clr-speed-red); 
+            text-align: left; 
+        }
         .erp-table td { padding: .65rem; border-bottom: 1px solid var(--clr-border); }
-        .btn-erp-gold { background: var(--clr-gold); color: var(--clr-navy); border: none; padding: .45rem 1.2rem; border-radius: 8px; font-weight: 700; text-decoration: none; cursor: pointer; }
-        .btn-erp-primary { background: var(--clr-navy); color: #FFF; border: 1px solid var(--clr-gold); padding: .45rem 1.2rem; border-radius: 8px; text-decoration: none; }
-        .btn-erp-danger { background: var(--clr-danger); color: #FFF; border: none; padding: .4rem 1rem; border-radius: 8px; text-decoration: none; }
+
+        .btn-erp-gold { 
+            background: var(--clr-racing-yellow); 
+            color: var(--clr-asphalt); 
+            border: none; 
+            padding: .45rem 1.2rem; 
+            border-radius: 8px; 
+            font-weight: 700; 
+            text-decoration: none; 
+            cursor: pointer; 
+            display: inline-block;
+        }
+        .btn-erp-primary { 
+            background: var(--clr-speed-red); 
+            color: #FFF; 
+            border: none; 
+            padding: .45rem 1.2rem; 
+            border-radius: 8px; 
+            font-weight: 600;
+            text-decoration: none; 
+            display: inline-block;
+        }
+        .btn-erp-danger { 
+            background: var(--clr-danger); 
+            color: #FFF; 
+            border: none; 
+            padding: .4rem 1rem; 
+            border-radius: 8px; 
+            text-decoration: none; 
+            display: inline-block;
+        }
         .btn-erp-sm { padding: .25rem .7rem; font-size: .8rem; }
-        .erp-input { width: 100%; padding: .5rem; border: 1.5px solid var(--clr-border); border-radius: 8px; background: var(--clr-surface); color: var(--clr-text); }
-        .badge-erp-active { background: rgba(26,122,74,.12); color: var(--clr-ok); border: 1px solid currentColor; padding: .2rem .6rem; border-radius: 20px; font-size: .75rem; }
-        .badge-erp-inactive { background: rgba(192,57,43,.1); color: var(--clr-danger); border: 1px solid currentColor; padding: .2rem .6rem; border-radius: 20px; font-size: .75rem; }
-        .erp-alert-success { background: rgba(26,122,74,.1); border-left: 5px solid var(--clr-ok); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; }
-        .erp-alert-danger { background: rgba(192,57,43,.1); border-left: 5px solid var(--clr-danger); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; }
-        .erp-alert-info { background: var(--clr-ice); border-left: 5px solid var(--clr-sky); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; }
+        .erp-input { 
+            width: 100%; 
+            padding: .5rem; 
+            border: 1.5px solid var(--clr-border); 
+            border-radius: 8px; 
+            background: var(--clr-surface); 
+            color: var(--clr-text); 
+        }
+
+        .badge-erp-active { 
+            background: rgba(22, 163, 74, .15); 
+            color: var(--clr-ok); 
+            border: 1px solid currentColor; 
+            padding: .2rem .6rem; 
+            border-radius: 20px; 
+            font-size: .75rem; 
+            font-weight: 700;
+        }
+        .badge-erp-inactive { 
+            background: rgba(220, 38, 38, .15); 
+            color: var(--clr-danger); 
+            border: 1px solid currentColor; 
+            padding: .2rem .6rem; 
+            border-radius: 20px; 
+            font-size: .75rem; 
+            font-weight: 700;
+        }
+        .erp-alert-success { background: rgba(22, 163, 74, .12); border-left: 5px solid var(--clr-ok); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; }
+        .erp-alert-danger { background: rgba(220, 38, 38, .12); border-left: 5px solid var(--clr-danger); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; }
     </style>
 </head>
 <body>
+
+<!-- NAVBAR PRINCIPAL -->
 <nav class="erp-navbar">
-    <a class="erp-brand" href="/">📦 ERP Django</a>
-    <div>
-        <a href="{% url 'productos:lista' %}" class="erp-nav-link {% block nav_productos %}{% endblock %}">Productos</a>
-        <a href="{% url 'clientes:lista' %}" class="erp-nav-link {% block nav_clientes %}{% endblock %}">Clientes</a>
-        <a href="{% url 'proveedores:lista' %}" class="erp-nav-link {% block nav_proveedores %}{% endblock %}">Proveedores</a>
-        <a href="{% url 'ventas:lista' %}" class="erp-nav-link {% block nav_ventas %}{% endblock %}">Ventas</a>
+    <a class="erp-brand" href="/">
+        <span>🏍️</span> MotoERP <small class="d-none d-md-inline" style="font-size: 0.75rem; color: var(--clr-chrome); font-weight: normal;">| Cascos & Biker Shop</small>
+    </a>
+    <div class="d-flex align-items-center">
+        <a href="{% url 'productos:lista' %}" class="erp-nav-link {% block nav_productos %}{% endblock %}">🏍️ Motos y Cascos</a>
+        <a href="{% url 'clientes:lista' %}" class="erp-nav-link {% block nav_clientes %}{% endblock %}">👥 Clientes</a>
+        <a href="{% url 'proveedores:lista' %}" class="erp-nav-link {% block nav_proveedores %}{% endblock %}">🏢 Proveedores</a>
+        <a href="{% url 'ventas:lista' %}" class="erp-nav-link {% block nav_ventas %}{% endblock %}">🏁 Ventas</a>
         {% if user.is_authenticated %}
             <a href="{% url 'account_logout' %}" class="erp-nav-link">Salir ({{ user.username }})</a>
         {% else %}
             <a href="{% url 'account_login' %}" class="erp-nav-link">Entrar</a>
         {% endif %}
+
+        <!-- BOTÓN MODO OSCURO / CLARO -->
+        <button id="theme-toggle" class="btn-theme-toggle" type="button" aria-label="Cambiar tema">
+            <span id="theme-toggle-icon">🌙</span>
+            <span id="theme-toggle-text" class="d-none d-lg-inline">Oscuro</span>
+        </button>
     </div>
 </nav>
 
+<!-- CARRETERA CON MOTOS ANIMADAS -->
+<div class="road-container">
+    <div class="road-lines"></div>
+    
+    <div class="bike-runner bike-1">
+        <span class="speed-trail">💨</span>🏍️
+    </div>
+    
+    <div class="bike-runner bike-2">
+        <span class="speed-trail">💨</span>🛵
+    </div>
+
+    <div class="bike-runner bike-3">
+        <span class="speed-trail">🔥</span>🏍️
+    </div>
+</div>
+
+<!-- MENSAJES DEL SISTEMA -->
 {% if messages %}
 <div class="container mt-3">
     {% for m in messages %}
@@ -68,8 +309,43 @@
 </div>
 {% endif %}
 
+<!-- CONTENIDO PRINCIPAL -->
 <main class="container py-4">
     {% block content %}{% endblock %}
 </main>
+
+<!-- SCRIPT MODO OSCURO / CLARO -->
+<script>
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-toggle-icon');
+    const themeText = document.getElementById('theme-toggle-text');
+
+    // Recuperar tema guardado en localStorage o detectar preferencia del sistema
+    const savedTheme = localStorage.getItem('theme');
+    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const initialTheme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
+
+    setTheme(initialTheme);
+
+    function setTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+
+        if (theme === 'dark') {
+            themeIcon.textContent = '☀️';
+            themeText.textContent = 'Claro';
+        } else {
+            themeIcon.textContent = '🌙';
+            themeText.textContent = 'Oscuro';
+        }
+    }
+
+    themeToggleBtn.addEventListener('click', () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        setTheme(newTheme);
+    });
+</script>
+
 </body>
 </html>
