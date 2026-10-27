@@ -1,6 +1,10 @@
-import os
+﻿import os
 import dj_database_url
 from .settings import *
+
+# Eliminar variable legacy heredada de settings.py para evitar conflicto en Django 4.2+
+if 'STATICFILES_STORAGE' in globals():
+    del STATICFILES_STORAGE
 
 DEBUG = False
 SECRET_KEY = os.environ.get('SECRET_KEY', 'secret-key-prod-placeholder')
@@ -30,10 +34,8 @@ CSRF_COOKIE_SECURE = os.environ.get('CSRF_COOKIE_SECURE', 'False') == 'True'
 X_FRAME_OPTIONS = 'DENY'
 SECURE_CONTENT_TYPE_NOSNIFF = True
 
-# Desactivar verificación estricta de manifiesto (Evita errores con los sourcemaps de Jazzmin)
 WHITENOISE_MANIFEST_STRICT = False
 
-# Configuración de estáticos para Django 4.2+ (Usa almacenamiento comprimido sin manifiesto estricto)
 STORAGES = {
     "default": {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
