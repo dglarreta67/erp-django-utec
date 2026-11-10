@@ -31,24 +31,18 @@ X_FRAME_OPTIONS = 'DENY'
 SECURE_CONTENT_TYPE_NOSNIFF = True
 
 # ── ALMACENAMIENTO (Django 4.2: solo STORAGES, nunca STATICFILES_STORAGE) ──
-# Estáticos: WhiteNoise con manifiesto. STRICT=False evita que collectstatic
-# falle por referencias a archivos faltantes (p. ej. bootstrap.min.css.map).
-WHITENOISE_MANIFEST_STRICT = False
-
+# Estáticos: WhiteNoise sin manifiesto. Evita que collectstatic falle por
+# referencias a archivos faltantes (p. ej. bootstrap.min.css.map).
 STORAGES = {
     'default': {
         'BACKEND': 'django.core.files.storage.FileSystemStorage',
     },
     'staticfiles': {
-        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+        'BACKEND': 'whitenoise.storage.CompressedStaticFilesStorage',
     },
 }
 
 # ── ARCHIVOS MEDIA EN S3 (solo si AWS_STORAGE_BUCKET_NAME está definida) ──
-# Variables a configurar en Render → Environment:
-#   AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_STORAGE_BUCKET_NAME,
-#   AWS_S3_REGION_NAME, AWS_S3_CUSTOM_DOMAIN (opcional)
-
 _bucket = os.environ.get('AWS_STORAGE_BUCKET_NAME', '')
 
 if _bucket:
@@ -56,9 +50,9 @@ if _bucket:
     AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', '')
     AWS_STORAGE_BUCKET_NAME = _bucket
     AWS_S3_REGION_NAME = os.environ.get('AWS_S3_REGION_NAME', 'us-east-1')
-    AWS_DEFAULT_ACL = None            # el bucket controla el acceso
-    AWS_S3_FILE_OVERWRITE = False     # no sobreescribir si el nombre ya existe
-    AWS_QUERYSTRING_AUTH = False      # URLs públicas (sin firma)
+    AWS_DEFAULT_ACL = None
+    AWS_S3_FILE_OVERWRITE = False
+    AWS_QUERYSTRING_AUTH = False
 
     _custom_domain = os.environ.get('AWS_S3_CUSTOM_DOMAIN', '')
     if _custom_domain:
