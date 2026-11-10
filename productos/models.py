@@ -1,4 +1,6 @@
 from decimal import Decimal
+# productos/models.py — agregar al inicio:
+from .validators import validar_imagen_producto
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.db import models
@@ -21,7 +23,7 @@ class Producto(models.Model):
     precio = models.DecimalField(
         max_digits=10, decimal_places=2,
         validators=[MinValueValidator(Decimal('0.00'))],
-        verbose_name='Precio ($)'
+        verbose_name='Precio'
     )
     stock = models.IntegerField(
         default=0, validators=[MinValueValidator(0)],
@@ -36,6 +38,13 @@ class Producto(models.Model):
         related_name='productos', verbose_name='Proveedor'
     )
     activo = models.BooleanField(default=True, verbose_name='Activo')
+    imagen = models.ImageField(
+        upload_to='productos/',      # subcarpeta dentro de MEDIA_ROOT
+        null=True,
+        blank=True,
+        verbose_name='Imagen del producto',
+        help_text='Formatos permitidos: JPEG, PNG, WEBP. Máximo 5 MB.'
+    )
     creado = models.DateTimeField(auto_now_add=True, verbose_name='Fecha de registro')
 
     class Meta:
@@ -54,3 +63,17 @@ class Producto(models.Model):
 
     def __str__(self) -> str:
         return f"{self.nombre} (${self.precio:.2f})"
+
+    # Actualizar el campo imagen en la clase Producto:
+    imagen = models.ImageField(
+        upload_to='productos/',
+        null=True,
+        blank=True,
+        verbose_name='Imagen del producto',
+        help_text='Formatos: JPEG, PNG, WEBP. Máximo 5 MB.',
+        validators=[validar_imagen_producto],   # ← agregar
+    )
+
+
+
+ 
