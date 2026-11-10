@@ -65,7 +65,18 @@ class Pedido(models.Model):
         max_digits=10, decimal_places=2, null=True, blank=True,
         validators=[MinValueValidator(Decimal('0.00'))], verbose_name='Total pagado'
     )
+    # ventas/models.py — en la clase Pedido, agregar después de total_pagado:
 
+    items_snapshot = models.JSONField(
+        default=list,
+        blank=True,
+        verbose_name='Snapshot de items del carrito',
+        help_text=(
+            'Copia del carrito al momento de crear el pedido. '
+            'Estructura: [{"producto_id": 1, "nombre": "...", '
+            '"cantidad": 2, "precio": "500.00"}]'
+        )
+    )
     class Meta:
         verbose_name = 'Pedido'
         verbose_name_plural = 'Pedidos'
