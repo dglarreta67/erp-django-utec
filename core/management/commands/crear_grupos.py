@@ -27,25 +27,30 @@ def _permisos(*modelos: type, acciones=('add', 'change', 'delete', 'view')):
 class Command(BaseCommand):
     help = 'Crea o actualiza los 3 grupos de acceso del ERP'
 
+    def _write(self, options, msg):
+        """Escribe el mensaje solo si la verbosidad lo permite."""
+        if options.get('verbosity', 1) >= 1:
+            self.stdout.write(msg)
+
     def handle(self, *args, **options):
-        self.stdout.write(self.style.MIGRATE_HEADING(
+        self._write(options, self.style.MIGRATE_HEADING(
             '\nConfigurando grupos de acceso del ERP...\n'
         ))
 
         # GERENTE
-        gerente, creado = Group.objects.get_or_create(name='Gerente')
+        gerente, _ = Group.objects.get_or_create(name='Gerente')
         permisos_gerente = _permisos(
             Cliente, Proveedor, Categoria, Producto,
             Venta, DetalleVenta, Pedido, ConfiguracionERP,
             acciones=('add', 'change', 'delete', 'view')
         )
         gerente.permissions.set(permisos_gerente)
-        self.stdout.write(self.style.SUCCESS(
+        self._write(options, self.style.SUCCESS(
             f'  ✅ Gerente — {permisos_gerente.count()} permisos asignados'
         ))
 
         # VENDEDOR
-        vendedor, creado = Group.objects.get_or_create(name='Vendedor')
+        vendedor, _ = Group.objects.get_or_create(name='Vendedor')
         permisos_vendedor = _permisos(
             Venta, DetalleVenta,
             acciones=('add', 'view')
@@ -54,12 +59,12 @@ class Command(BaseCommand):
             acciones=('view',)
         )
         vendedor.permissions.set(permisos_vendedor)
-        self.stdout.write(self.style.SUCCESS(
+        self._write(options, self.style.SUCCESS(
             f'  ✅ Vendedor — {permisos_vendedor.count()} permisos asignados'
         ))
 
         # ALMACÉN
-        almacen, creado = Group.objects.get_or_create(name='Almacén')
+        almacen, _ = Group.objects.get_or_create(name='Almacén')
         permisos_almacen = _permisos(
             Producto, Categoria,
             acciones=('add', 'change', 'view')
@@ -68,10 +73,10 @@ class Command(BaseCommand):
             acciones=('view',)
         )
         almacen.permissions.set(permisos_almacen)
-        self.stdout.write(self.style.SUCCESS(
+        self._write(options, self.style.SUCCESS(
             f'  ✅ Almacén — {permisos_almacen.count()} permisos asignados'
         ))
 
-        self.stdout.write(self.style.SUCCESS(
+        self._write(options, self.style.SUCCESS(
             '\n🎉 Grupos configurados exitosamente.'
         ))

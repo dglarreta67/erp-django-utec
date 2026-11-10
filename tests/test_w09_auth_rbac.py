@@ -4,6 +4,7 @@ from django.test import TestCase
 from django.urls import reverse
 from productos.models import Categoria, Producto
 
+
 class AuthRBACTest(TestCase):
     def test_login_page_200(self):
         r = self.client.get(reverse('account_login'))
@@ -11,6 +12,6 @@ class AuthRBACTest(TestCase):
 
     def test_management_command_crea_grupos(self):
         from django.core.management import call_command
-        call_command('crear_grupos')
+        call_command('crear_grupos', verbosity=0)
         for g in ['Gerente', 'Vendedor', 'Almacén']:
             self.assertTrue(Group.objects.filter(name=g).exists())
