@@ -11,6 +11,7 @@ DEBUG = env('DEBUG', default=True)
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['localhost', '127.0.0.1', '*'])
 
 # core/settings.py — actualizar INSTALLED_APPS (terceros):
+# core/settings.py — actualizar INSTALLED_APPS:
 INSTALLED_APPS = [
     'jazzmin',
     'django.contrib.admin',
@@ -25,7 +26,8 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'rest_framework',
-    'rest_framework.authtoken',    # ← agregar
+    'rest_framework.authtoken',
+    'django_filters',              # ← nuevo (nombre de app es django_filters)
     'whitenoise.runserver_nostatic',
     # Apps del ERP
     'clientes',
@@ -34,6 +36,7 @@ INSTALLED_APPS = [
     'ventas',
     'reportes',
     'configuracion',
+    'catalogo',                    # ← nuevo
     'core',
 ]
 
@@ -51,6 +54,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'core.urls'
 
+# core/settings.py — actualizar TEMPLATES[0]['OPTIONS']['context_processors']:
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -62,10 +66,13 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # Context processor del carrito — W13
+                'catalogo.context_processors.carrito_info',
             ],
         },
     },
 ]
+
 
 DATABASES = {
     'default': {

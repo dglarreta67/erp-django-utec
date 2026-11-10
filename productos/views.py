@@ -1,9 +1,13 @@
+import openpyxl
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .forms import ProductoForm
 from .models import Producto
+
 
 class ProductoListView(ListView):
     model = Producto
@@ -14,6 +18,7 @@ class ProductoListView(ListView):
     def get_queryset(self):
         return Producto.objects.select_related('categoria', 'proveedor').filter(activo=True).order_by('nombre')
 
+
 class ProductoDetailView(DetailView):
     model = Producto
     template_name = 'productos/detalle.html'
@@ -22,6 +27,7 @@ class ProductoDetailView(DetailView):
 
     def get_queryset(self):
         return Producto.objects.select_related('categoria', 'proveedor')
+
 
 class ProductoCreateView(LoginRequiredMixin, CreateView):
     model = Producto
@@ -34,6 +40,7 @@ class ProductoCreateView(LoginRequiredMixin, CreateView):
         messages.success(self.request, f'Producto "{self.object.nombre}" creado exitosamente.')
         return response
 
+
 class ProductoUpdateView(LoginRequiredMixin, UpdateView):
     model = Producto
     form_class = ProductoForm
@@ -45,6 +52,7 @@ class ProductoUpdateView(LoginRequiredMixin, UpdateView):
         response = super().form_valid(form)
         messages.success(self.request, f'Producto "{self.object.nombre}" actualizado.')
         return response
+
 
 class ProductoDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = Producto
@@ -59,3 +67,21 @@ class ProductoDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView
         response = super().form_valid(form)
         messages.success(self.request, f'Producto "{nombre}" eliminado.')
         return response
+
+
+@login_required
+def exportar_excel(request):
+    """Descarga el catálogo de productos en formato .xlsx."""
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = 'Productos'
+    ws.append(['ID', 'Nombre', 'Precio', 'Stock', 'Categoría'])
+    for p in Producto.objects.select_related('categoria').order_by('nombre'):
+        ws.append([p.pk, p.nombre, float(p.precio), p.stock, p.categoria.nombre])
+
+    response = HttpResponse(
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    response['Content-Disposition'] = 'attachment; filename="productos.xlsx"'
+    wb.save(response)
+    return response

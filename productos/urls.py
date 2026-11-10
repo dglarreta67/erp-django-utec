@@ -9,4 +9,5 @@ urlpatterns = [
     path('nuevo/',                      views.ProductoCreateView.as_view(), name='crear'),
     path('<int:producto_id>/editar/',   views.ProductoUpdateView.as_view(), name='editar'),
     path('<int:producto_id>/eliminar/', views.ProductoDeleteView.as_view(), name='eliminar'),
+    path('exportar/excel/', views.exportar_excel, name='exportar_excel'),
 ]

@@ -151,6 +151,14 @@
         .erp-nav-link:hover, .erp-nav-link.active {
             background: #FFFFFF; color: var(--clr-title) !important;
         }
+        .erp-cart-badge {
+            display: inline-block;
+            background: var(--clr-amber); color: #111;
+            font-family: 'Nunito',sans-serif; font-weight: 700;
+            font-size: .75rem; line-height: 1;
+            padding: .2rem .45rem; border-radius: 999px;
+            margin-left: .25rem; vertical-align: middle;
+        }
         .theme-toggle {
             background: #FFFFFF; color: var(--clr-navy);
             border: 2px solid #111; border-radius: 50%;
@@ -390,6 +398,15 @@
         <a href="/proveedores/" class="erp-nav-link {% block nav_proveedores %}{% endblock %}">Proveedores</a>
         <a href="/ventas/" class="erp-nav-link {% block nav_ventas %}{% endblock %}">Ventas</a>
         <a href="/reportes/" class="erp-nav-link {% block nav_reportes %}{% endblock %}">Reportes</a>
+
+        <!-- Tienda (catálogo) -->
+        <a href="{% url 'catalogo:catalogo' %}" class="erp-nav-link {% block nav_catalogo %}{% endblock %}">🛍️ Tienda</a>
+
+        <!-- Carrito con contador -->
+        <a href="{% url 'catalogo:carrito' %}" class="erp-nav-link {% block nav_carrito %}{% endblock %}" style="position:relative;">
+            🛒 Carrito{% if carrito_total_items > 0 %} <span class="erp-cart-badge">{{ carrito_total_items }}</span>{% endif %}
+        </a>
+
         <a href="/admin/" class="erp-nav-link">Admin</a>
         {% if user.is_authenticated %}
             <a href="/accounts/logout/" class="erp-nav-link">Salir ({{ user.username }})</a>
